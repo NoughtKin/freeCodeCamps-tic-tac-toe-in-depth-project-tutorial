@@ -141,3 +141,11 @@ const App = {
 };
 
 window.addEventListener("load", App.init);
+
+function init() {
+  const view = new View();
+
+  console.log(view.$.turn);
+}
+
+window.addEventListener("load", App.init);
