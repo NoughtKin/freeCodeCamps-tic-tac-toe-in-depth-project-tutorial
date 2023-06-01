@@ -1,4 +1,4 @@
-class View {
+export default class View {
   $ = {};
 
   constructor() {
@@ -12,5 +12,23 @@ class View {
     this.$.turn = document.querySelector('[data-id="turn"]');
 
     this.$.squares = document.querySelectorAll('[data-id="square"]');
+
+    // UI-only event listeners
+    this.$.menu.addEventListener("click", (event) => {
+      this.$.menuItems.classList.toggle("hidden");
+    });
   }
+}
+
+handleResetBtn (handler) {
+  this.$.resetBtn.addEventListener(handler)
+}
+
+handleNewRoundBtn (handler) {
+  this.$.newRoundBtn.addEventListener(handler)
+}
+
+handleSquares (handler) {
+  App.$.squares.forEach((square) => {
+    square.addEventListener(handler)
 }

@@ -1,146 +1,148 @@
-const App = {
-  $: {
-    menu: document.querySelector('[data-id="menu"]'),
-    menuItems: document.querySelector('[data-id="menu-items"]'),
-    resetBtn: document.querySelector('[data-id="reset-btn"]'),
-    newRoundBtn: document.querySelector('[data-id="new-round-btn"]'),
-    modal: document.querySelector('[data-id="modal"]'),
-    modalText: document.querySelector('[data-id="modal-text"]'),
-    modalBtn: document.querySelector('[data-id="modal-btn"]'),
-    turn: document.querySelector('[data-id="turn"]'),
+import View from "./view.js";
 
-    squares: document.querySelectorAll('[data-id="square"]'),
-  },
+// const App = {
+//   $: {
+//     menu: document.querySelector('[data-id="menu"]'),
+//     menuItems: document.querySelector('[data-id="menu-items"]'),
+//     resetBtn: document.querySelector('[data-id="reset-btn"]'),
+//     newRoundBtn: document.querySelector('[data-id="new-round-btn"]'),
+//     modal: document.querySelector('[data-id="modal"]'),
+//     modalText: document.querySelector('[data-id="modal-text"]'),
+//     modalBtn: document.querySelector('[data-id="modal-btn"]'),
+//     turn: document.querySelector('[data-id="turn"]'),
 
-  state: {
-    moves: [],
-  },
+//     squares: document.querySelectorAll('[data-id="square"]'),
+//   },
 
-  getGameStatus(moves) {
-    const p1Moves = moves
-      .filter((move) => move.playerId === 1)
-      .map((move) => +move.squareId);
-    const p2Moves = moves
-      .filter((move) => move.playerId === 2)
-      .map((move) => +move.squareId);
+//   state: {
+//     moves: [],
+//   },
 
-    // Condition in which a player can win the game
-    const winningPatterns = [
-      [1, 2, 3],
-      [1, 5, 9],
-      [1, 4, 7],
-      [2, 5, 8],
-      [3, 5, 7],
-      [3, 6, 9],
-      [4, 5, 6],
-      [7, 8, 9],
-    ];
+//   getGameStatus(moves) {
+//     const p1Moves = moves
+//       .filter((move) => move.playerId === 1)
+//       .map((move) => +move.squareId);
+//     const p2Moves = moves
+//       .filter((move) => move.playerId === 2)
+//       .map((move) => +move.squareId);
 
-    let winner = null;
+//     // Condition in which a player can win the game
+//     const winningPatterns = [
+//       [1, 2, 3],
+//       [1, 5, 9],
+//       [1, 4, 7],
+//       [2, 5, 8],
+//       [3, 5, 7],
+//       [3, 6, 9],
+//       [4, 5, 6],
+//       [7, 8, 9],
+//     ];
 
-    // Check if the player's move pattern matches one of those above, if yes then declare the winner
-    winningPatterns.forEach((pattern) => {
-      const p1Wins = pattern.every((v) => p1Moves.includes(v));
-      const p2Wins = pattern.every((v) => p2Moves.includes(v));
+//     let winner = null;
 
-      if (p1Wins) winner = 1;
-      if (p2Wins) winner = 2;
-    });
+//     // Check if the player's move pattern matches one of those above, if yes then declare the winner
+//     winningPatterns.forEach((pattern) => {
+//       const p1Wins = pattern.every((v) => p1Moves.includes(v));
+//       const p2Wins = pattern.every((v) => p2Moves.includes(v));
 
-    return {
-      status: moves.length === 9 || winner != null ? "complete" : "in-progress",
-      winner,
-    };
-  },
+//       if (p1Wins) winner = 1;
+//       if (p2Wins) winner = 2;
+//     });
 
-  init() {
-    App.registerEventListeners();
-  },
+//     return {
+//       status: moves.length === 9 || winner != null ? "complete" : "in-progress",
+//       winner,
+//     };
+//   },
 
-  registerEventListeners() {
-    App.$.menu.addEventListener("click", (event) => {
-      App.$.menuItems.classList.toggle("hidden");
-    });
+//   init() {
+//     App.registerEventListeners();
+//   },
 
-    App.$.resetBtn.addEventListener("click", (event) => {
-      App.$.squares.reset();
-    });
+//   registerEventListeners() {
+//     App.$.menu.addEventListener("click", (event) => {
+//       App.$.menuItems.classList.toggle("hidden");
+//     });
 
-    // App.$.newRoundBtn.addEventListener("click", (event) => {});
+//    App.$.resetBtn.addEventListener("click", (event) => {
+//      App.$.squares.reset();
+//    });
 
-    App.$.modalBtn.addEventListener("click", (event) => {
-      App.state.moves = [];
-      App.$.squares.forEach((square) => square.replaceChildren());
-      App.$.modal.classList.add("hidden");
-      App.$.turn.reset();
-    });
+//     // App.$.newRoundBtn.addEventListener("click", (event) => {});
 
-    App.$.squares.forEach((square) => {
-      square.addEventListener("click", (event) => {
-        const hasMove = (squareId) => {
-          const existingMove = App.state.moves.find(
-            (move) => move.squareId === squareId
-          );
-          return existingMove !== undefined;
-        };
+//     App.$.modalBtn.addEventListener("click", (event) => {
+//       App.state.moves = [];
+//       App.$.squares.forEach((square) => square.replaceChildren());
+//       App.$.modal.classList.add("hidden");
+//       App.$.turn.reset();
+//     });
 
-        if (hasMove(+square.id)) {
-          return;
-        }
+//     App.$.squares.forEach((square) => {
+//       square.addEventListener("click", (event) => {
+//         const hasMove = (squareId) => {
+//           const existingMove = App.state.moves.find(
+//             (move) => move.squareId === squareId
+//           );
+//           return existingMove !== undefined;
+//         };
 
-        const lastMove = App.state.moves.at(-1);
-        const getOppositePlayer = (playerId) => (playerId === 1 ? 2 : 1);
-        const currentPlayer =
-          App.state.moves.length === 0
-            ? 1
-            : getOppositePlayer(lastMove.playerId);
-        const nextPlayer = getOppositePlayer(currentPlayer);
+//         if (hasMove(+square.id)) {
+//           return;
+//         }
 
-        const squareIcon = document.createElement("i");
-        const turnIcon = document.createElement("i");
-        const turnLabel = document.createElement("p");
+//         const lastMove = App.state.moves.at(-1);
+//         const getOppositePlayer = (playerId) => (playerId === 1 ? 2 : 1);
+//         const currentPlayer =
+//           App.state.moves.length === 0
+//             ? 1
+//             : getOppositePlayer(lastMove.playerId);
+//         const nextPlayer = getOppositePlayer(currentPlayer);
 
-        turnLabel.innerText = `Player ${nextPlayer}, start`;
+//         const squareIcon = document.createElement("i");
+//         const turnIcon = document.createElement("i");
+//         const turnLabel = document.createElement("p");
 
-        if (currentPlayer === 1) {
-          squareIcon.classList.add("fa-solid", "fa-x", "yellow");
-          turnIcon.classList.add("fa-solid", "fa-o", "turquoise");
-          turnLabel.classList = "turquoise";
-        } else {
-          squareIcon.classList.add("fa-solid", "fa-o", "turquoise");
-          turnIcon.classList.add("fa-solid", "fa-x", "yellow");
-          turnLabel.classList = "yellow";
-        }
+//         turnLabel.innerText = `Player ${nextPlayer}, start`;
 
-        App.$.turn.replaceChildren(turnIcon, turnLabel);
+//         if (currentPlayer === 1) {
+//           squareIcon.classList.add("fa-solid", "fa-x", "yellow");
+//           turnIcon.classList.add("fa-solid", "fa-o", "turquoise");
+//           turnLabel.classList = "turquoise";
+//         } else {
+//           squareIcon.classList.add("fa-solid", "fa-o", "turquoise");
+//           turnIcon.classList.add("fa-solid", "fa-x", "yellow");
+//           turnLabel.classList = "yellow";
+//         }
 
-        App.state.moves.push({
-          squareId: +square.id,
-          playerId: currentPlayer,
-        });
+//         App.$.turn.replaceChildren(turnIcon, turnLabel);
 
-        square.replaceChildren(squareIcon);
+//         App.state.moves.push({
+//           squareId: +square.id,
+//           playerId: currentPlayer,
+//         });
 
-        const game = App.getGameStatus(App.state.moves);
+//         square.replaceChildren(squareIcon);
 
-        if (game.status === "complete") {
-          App.$.modal.classList.remove("hidden");
+//         const game = App.getGameStatus(App.state.moves);
 
-          let message = "";
-          if (game.winner) {
-            message = `Player ${game.winner} wins!`;
-          } else {
-            message = "Tie!";
-          }
+//         if (game.status === "complete") {
+//           App.$.modal.classList.remove("hidden");
 
-          App.$.modalText.textContent = message;
-        }
-      });
-    });
-  },
-};
+//           let message = "";
+//           if (game.winner) {
+//             message = `Player ${game.winner} wins!`;
+//           } else {
+//             message = "Tie!";
+//           }
 
-window.addEventListener("load", App.init);
+//           App.$.modalText.textContent = message;
+//         }
+//       });
+//     });
+//   },
+// };
+
+// window.addEventListener("load", App.init);
 
 function init() {
   const view = new View();
@@ -148,4 +150,4 @@ function init() {
   console.log(view.$.turn);
 }
 
-window.addEventListener("load", App.init);
+window.addEventListener("load", init);
