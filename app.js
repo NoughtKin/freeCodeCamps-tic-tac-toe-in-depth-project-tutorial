@@ -147,17 +147,17 @@ import View from "./view.js";
 function init() {
   const view = new View();
 
-  bindGameResetEvent((event) => {
+  view.bindGameResetEvent((event) => {
     console.log("Reset the game");
     console.log(event);
   });
 
-  bindNewRoundEvent((event) => {
+  view.bindNewRoundEvent((event) => {
     console.log("New round");
     console.log(event);
   });
 
-  bindPlayerMoveEvent((event) => {
+  view.bindPlayerMoveEvent((event) => {
     console.log("Player has moved");
     console.log(event);
   });
