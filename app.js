@@ -68,7 +68,7 @@ import View from "./view.js";
 //      App.$.squares.reset();
 //    });
 
-//     // App.$.newRoundBtn.addEventListener("click", (event) => {});
+//     App.$.newRoundBtn.addEventListener("click", (event) => {});
 
 //     App.$.modalBtn.addEventListener("click", (event) => {
 //       App.state.moves = [];

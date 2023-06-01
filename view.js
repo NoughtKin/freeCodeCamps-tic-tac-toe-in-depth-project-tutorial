@@ -18,17 +18,18 @@ export default class View {
       this.$.menuItems.classList.toggle("hidden");
     });
   }
-}
 
-handleResetBtn (handler) {
-  this.$.resetBtn.addEventListener(handler)
-}
+  bindGameResetEvent(handler) {
+    this.$.resetBtn.addEventListener("click", handler);
+  }
 
-handleNewRoundBtn (handler) {
-  this.$.newRoundBtn.addEventListener(handler)
-}
+  bindNewRoundEvent(handler) {
+    this.$.newRoundBtn.addEventListener("click", handler);
+  }
 
-handleSquares (handler) {
-  App.$.squares.forEach((square) => {
-    square.addEventListener(handler)
+  bindPlayerMoveEvent(handler) {
+    this.$.squares.forEach((square) => {
+      square.addEventListener("click", handler);
+    });
+  }
 }
