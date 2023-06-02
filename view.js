@@ -43,5 +43,11 @@ export default class View {
 
   toggleMenu() {
     this.$.menuItems.classList.toggle("hidden");
+    this.$.menuBtn.classList.toggle("border");
+
+    const icon = this.$.menuBtn.querySelector("i");
+
+    icon.classList.toggle("fa-chevron-down");
+    icon.classList.toggle("fa-chevron-up");
   }
 }
