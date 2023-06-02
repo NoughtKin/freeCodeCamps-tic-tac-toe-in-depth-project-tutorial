@@ -12,7 +12,7 @@ export default class View {
     this.$.modalBtn = this.#qs('[data-id="modal-btn"]');
     this.$.turn = this.#qs('[data-id="turn"]');
 
-    this.$.squares = document.querySelectorAll('[data-id="square"]');
+    this.$.squares = this.#qsAll('[data-id="square"]');
 
     // UI-only event listeners
     this.$.menuBtn.addEventListener("click", (event) => {
@@ -51,11 +51,21 @@ export default class View {
     icon.classList.toggle("fa-chevron-up");
   }
 
-  #qs(selector) {
-    const el = document.querySelector(selector);
+  #qs(selector, parent) {
+    const el = parent
+      ? document.querySelector(selector)
+      : document.querySelector(selector);
 
     if (!el) throw new Error("Elements not found");
 
     return el;
+  }
+
+  #qsAll(selector) {
+    const elList = document.querySelectorAll(selector);
+
+    if (!elList) throw new Error("Elements not found");
+
+    return elList;
   }
 }
