@@ -1,5 +1,6 @@
 export default class View {
   $ = {};
+  $$ = {};
 
   constructor() {
     this.$.menu = this.#qs('[data-id="menu"]');
@@ -12,7 +13,7 @@ export default class View {
     this.$.modalBtn = this.#qs('[data-id="modal-btn"]');
     this.$.turn = this.#qs('[data-id="turn"]');
 
-    this.$.squares = this.#qsAll('[data-id="square"]');
+    this.$$.squares = this.#qsAll('[data-id="square"]');
 
     // UI-only event listeners
     this.$.menuBtn.addEventListener("click", (event) => {
