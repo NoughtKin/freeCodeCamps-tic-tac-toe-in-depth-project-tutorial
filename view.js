@@ -51,9 +51,11 @@ export default class View {
     icon.classList.toggle("fa-chevron-up");
   }
 
-  qs(el) {
-    document.querySelector(el);
+  qs(selector) {
+    const el = document.querySelector(selector);
 
-    if (el === null) new Error("Elements not found");
+    if (!el) throw new Error("Elements not found");
+
+    return el;
   }
 }
